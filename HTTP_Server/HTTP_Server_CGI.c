@@ -12,7 +12,7 @@
 #include "cmsis_os2.h"                  // ::CMSIS:RTOS2
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
 
-#include "Board_LED.h"                  // ::Board Support:LED
+#include "rgb.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
@@ -26,6 +26,7 @@ extern uint8_t  get_button (void);
 extern bool LEDrun;
 extern char lcd_text[2][20+1];
 //extern osThreadId_t TID_Display;
+extern int32_t LED_rgb_SetOut (uint32_t val);
 
 // Local variables.
 static uint8_t P2;
@@ -112,7 +113,7 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
   LEDrun = true;
   if (len == 0) {
     // No data or all items (radio, checkbox) are off
-    LED_SetOut (P2);
+    LED_rgb_SetOut (P2);
     return;
   }
   passw[0] = 1;
@@ -138,12 +139,6 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
       }
       else if (strcmp (var, "led5=on") == 0) {
         P2 |= 0x20;
-      }
-      else if (strcmp (var, "led6=on") == 0) {
-        P2 |= 0x40;
-      }
-      else if (strcmp (var, "led7=on") == 0) {
-        P2 |= 0x80;
       }
       else if (strcmp (var, "ctrl=Browser") == 0) {
         LEDrun = false;
@@ -173,7 +168,7 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
       }
     }
   } while (data);
-  LED_SetOut (P2);
+  LED_rgb_SetOut (P2);
 }
 
 // Generate dynamic web data from a script line.
@@ -252,7 +247,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       }
       // LED CheckBoxes
       id = env[2] - '0';
-      if (id > 7) {
+      if (id > 5) {
         id = 0;
       }
       id = (uint8_t)(1U << id);

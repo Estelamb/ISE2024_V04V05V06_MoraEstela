@@ -13,9 +13,9 @@
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
 
 #include "stm32f4xx_hal.h"              // Keil::Device:STM32Cube HAL:Common
-#include "Board_LED.h"                  // ::Board Support:LED
 #include "Board_Buttons.h"              // ::Board Support:Buttons
 //#include "Board_ADC.h"                  // ::Board Support:A/D Converter
+#include "rgb.h"
 
 // Main stack size must be multiple of 8 Bytes
 #define APP_MAIN_STK_SZ (1024U)
@@ -34,6 +34,9 @@ extern char lcd_text[2][20+1];
 
 //extern osThreadId_t TID_Display;
 extern osThreadId_t TID_Led;
+
+extern int32_t LED_rgb_Initialize (void);
+extern int32_t LED_rgb_SetOut (uint32_t val);	
 
 bool LEDrun;
 char lcd_text[2][20+1] = { "LCD line 1",
@@ -146,7 +149,7 @@ static __NO_RETURN void BlinkLed (void *arg) {
   while(1) {
     /* Every 100 ms */
     if (LEDrun == true) {
-      LED_SetOut (led_val[cnt]);
+      LED_rgb_SetOut (led_val[cnt]);
       if (++cnt >= sizeof(led_val)) {
         cnt = 0U;
       }
@@ -161,7 +164,7 @@ static __NO_RETURN void BlinkLed (void *arg) {
 __NO_RETURN void app_main (void *arg) {
   (void)arg;
 
-  LED_Initialize();
+  LED_rgb_Initialize();
   Buttons_Initialize();
   //ADC_Initialize();
 

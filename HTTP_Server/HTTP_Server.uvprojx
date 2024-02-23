@@ -403,6 +403,16 @@
               <FileType>1</FileType>
               <FilePath>Web\Web.c</FilePath>
             </File>
+            <File>
+              <FileName>rgb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\rgb.c</FilePath>
+            </File>
+            <File>
+              <FileName>rgb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\rgb.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -931,6 +941,16 @@
               <FileName>Web.c</FileName>
               <FileType>1</FileType>
               <FilePath>Web\Web.c</FilePath>
+            </File>
+            <File>
+              <FileName>rgb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\rgb.c</FilePath>
+            </File>
+            <File>
+              <FileName>rgb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\rgb.h</FilePath>
             </File>
           </Files>
         </Group>
