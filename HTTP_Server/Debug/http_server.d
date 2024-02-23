@@ -32,9 +32,17 @@
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fmc.h
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h
+.\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h
+.\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h
+.\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS2\Include\cmsis_os2.h
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Network\Include\rl_net.h
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Network\Include\rl_net_ds.h
 .\debug\http_server.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_Buttons.h
 .\debug\http_server.o: rgb.h
+.\debug\http_server.o: lcd.h
+.\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Driver\Include\Driver_SPI.h
+.\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Driver\Include\Driver_Common.h
+.\debug\http_server.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\debug\http_server.o: Arial12x12.h

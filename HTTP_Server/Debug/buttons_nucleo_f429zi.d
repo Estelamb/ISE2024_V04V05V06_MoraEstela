@@ -30,4 +30,7 @@
 .\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fmc.h
 .\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h
 .\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h
+.\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h
+.\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h
+.\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h
 .\debug\buttons_nucleo_f429zi.o: C:\Users\estel\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_Buttons.h

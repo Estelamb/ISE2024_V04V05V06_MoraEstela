@@ -16,6 +16,8 @@
 #include "Board_Buttons.h"              // ::Board Support:Buttons
 //#include "Board_ADC.h"                  // ::Board Support:A/D Converter
 #include "rgb.h"
+#include "lcd.h"
+#include "Arial12x12.h"
 
 // Main stack size must be multiple of 8 Bytes
 #define APP_MAIN_STK_SZ (1024U)
@@ -32,11 +34,20 @@ extern void     netDHCP_Notify (uint32_t if_num, uint8_t option, const uint8_t *
 extern bool LEDrun;
 extern char lcd_text[2][20+1];
 
-//extern osThreadId_t TID_Display;
+extern osThreadId_t TID_Display;
 extern osThreadId_t TID_Led;
 
 extern int32_t LED_rgb_Initialize (void);
 extern int32_t LED_rgb_SetOut (uint32_t val);	
+
+unsigned char bufferWeb[512];
+uint16_t positionL1 = 0;
+uint16_t positionL2 = 0;
+
+extern void LCD_Initialize(void);
+void LCD_update(void);
+void LCD_symbolToLocalBuffer_L1(uint8_t symbol);
+void LCD_symbolToLocalBuffer_L2(uint8_t symbol);
 
 bool LEDrun;
 char lcd_text[2][20+1] = { "LCD line 1",
@@ -48,7 +59,7 @@ osThreadId_t TID_Led;
 
 /* Thread declarations */
 static void BlinkLed (void *arg);
-//static void Display  (void *arg);
+static void Display  (void *arg);
 
 __NO_RETURN void app_main (void *arg);
 
@@ -78,62 +89,40 @@ void netDHCP_Notify (uint32_t if_num, uint8_t option, const uint8_t *val, uint32
 
   if (option == NET_DHCP_OPTION_IP_ADDRESS) {
     /* IP address change, trigger LCD update */
-    //osThreadFlagsSet (TID_Display, 0x01);
+    osThreadFlagsSet (TID_Display, 0x01);
   }
 }
 
 /*----------------------------------------------------------------------------
   Thread 'Display': LCD display handler
  *---------------------------------------------------------------------------*/
-/*static __NO_RETURN void Display (void *arg) {
-  static uint8_t ip_addr[NET_ADDR_IP6_LEN];
-  static char    ip_ascii[40];
-  static char    buf[24];
-  uint32_t x = 0;
-
-  (void)arg;
-
-  GLCD_Initialize         ();
-  GLCD_SetBackgroundColor (GLCD_COLOR_BLUE);
-  GLCD_SetForegroundColor (GLCD_COLOR_WHITE);
-  GLCD_ClearScreen        ();
-  GLCD_SetFont            (&GLCD_Font_16x24);
-  GLCD_DrawString         (x*16U, 1U*24U, "       MDK-MW       ");
-  GLCD_DrawString         (x*16U, 2U*24U, "HTTP Server example ");
-
-  GLCD_DrawString (x*16U, 4U*24U, "IP4:Waiting for DHCP");*/
-
-  /* Print Link-local IPv6 address */
-  /*netIF_GetOption (NET_IF_CLASS_ETH,
-                   netIF_OptionIP6_LinkLocalAddress, ip_addr, sizeof(ip_addr));
-
-  netIP_ntoa(NET_ADDR_IP6, ip_addr, ip_ascii, sizeof(ip_ascii));
-
-  sprintf (buf, "IP6:%.16s", ip_ascii);
-  GLCD_DrawString ( x    *16U, 5U*24U, buf);
-  sprintf (buf, "%s", ip_ascii+16);
-  GLCD_DrawString ((x+10U)*16U, 6U*24U, buf);
-
-  while(1) {*/
-    /* Wait for signal from DHCP */
-    //osThreadFlagsWait (0x01U, osFlagsWaitAny, osWaitForever);
-
-    /* Retrieve and print IPv4 address */
-    /*netIF_GetOption (NET_IF_CLASS_ETH,
-                     netIF_OptionIP4_Address, ip_addr, sizeof(ip_addr));
-
-    netIP_ntoa (NET_ADDR_IP4, ip_addr, ip_ascii, sizeof(ip_ascii));
-
-    sprintf (buf, "IP4:%-16s",ip_ascii);
-    GLCD_DrawString (x*16U, 4U*24U, buf);*/
-
-    /* Display user text lines */
-    /*sprintf (buf, "%-20s", lcd_text[0]);
-    GLCD_DrawString (x*16U, 7U*24U, buf);
-    sprintf (buf, "%-20s", lcd_text[1]);
-    GLCD_DrawString (x*16U, 8U*24U, buf);
-  }
-}*/
+static __NO_RETURN void Display (void *arg) {
+  int i;
+	(void)arg;
+	
+	while(1){
+		/* Wait for signal from DHCP */
+    osThreadFlagsWait (0x01U, osFlagsWaitAny, osWaitForever);
+		
+		/* Display user text lines */
+		positionL1 = 0;
+		positionL2 = 0;
+		
+		for(i=0; i<512; i++){
+			bufferWeb[i] = 0x00;
+		}
+		
+		for(i=0; i<strlen(lcd_text[0]); i++){
+			LCD_symbolToLocalBuffer_L1(lcd_text[0][i]);
+		}
+		
+		for(i=0; i<strlen(lcd_text[1]); i++){
+			LCD_symbolToLocalBuffer_L2(lcd_text[1][i]);
+		}
+		
+		LCD_update();
+	}	
+}
 
 /*----------------------------------------------------------------------------
   Thread 'BlinkLed': Blink the LEDs on an eval board
@@ -162,16 +151,96 @@ static __NO_RETURN void BlinkLed (void *arg) {
   Main Thread 'main': Run Network
  *---------------------------------------------------------------------------*/
 __NO_RETURN void app_main (void *arg) {
-  (void)arg;
+  int i;
+	(void)arg;
 
   LED_rgb_Initialize();
   Buttons_Initialize();
+	
+	LCD_Initialize();
+	
+	for(i=0; i<512; i++){
+		bufferWeb[i] = 0x00;
+	}
+	
+	LCD_update();
   //ADC_Initialize();
 
   netInitialize ();
 
   TID_Led     = osThreadNew (BlinkLed, NULL, NULL);
-  //TID_Display = osThreadNew (Display,  NULL, NULL);
+  TID_Display = osThreadNew (Display,  NULL, NULL);
 
   osThreadExit();
 }
+
+void LCD_symbolToLocalBuffer_L1(uint8_t symbol){
+	uint8_t i, value1, value2;
+	uint16_t offset = 0;
+	
+	offset = 25*(symbol - ' ');
+	
+	for(i=0; i<12; i++){
+		value1 = Arial12x12[offset + i*2 + 1];
+		value2 = Arial12x12[offset + i*2 + 2];
+		
+		bufferWeb[i + positionL1] = value1;
+		bufferWeb[i + 128 + positionL1] = value2;
+	}
+	
+	positionL1 = positionL1 + Arial12x12[offset];
+}
+
+void LCD_symbolToLocalBuffer_L2(uint8_t symbol){
+	uint8_t i, value1, value2;
+	uint16_t offset = 0;
+	
+	offset = 25*(symbol - ' ');
+	
+	for(i=0; i<12; i++){
+		value1 = Arial12x12[offset + i*2 + 1];
+		value2 = Arial12x12[offset + i*2 + 2];
+		
+		bufferWeb[i + 256 + positionL2] = value1;
+		bufferWeb[i + 384 + positionL2] = value2;
+	}
+	
+	positionL2 = positionL2 + Arial12x12[offset];
+}
+
+void LCD_update(void){
+	int i;
+	LCD_wr_cmd(0x00); // 4 bits de la parte baja de la dirección a 0
+	LCD_wr_cmd(0x10); // 4 bits de la parte alta de la dirección a 0
+	LCD_wr_cmd(0xB0); // Página 0
+	
+	for(i=0;i<128;i++){
+		LCD_wr_data(bufferWeb[i]);
+	}
+	
+	LCD_wr_cmd(0x00); // 4 bits de la parte baja de la dirección a 0
+	LCD_wr_cmd(0x10); // 4 bits de la parte alta de la dirección a 0
+	LCD_wr_cmd(0xB1); // Página 1
+	
+	for(i=128;i<256;i++){
+		LCD_wr_data(bufferWeb[i]);
+	}
+	
+	LCD_wr_cmd(0x00);
+	LCD_wr_cmd(0x10);
+	LCD_wr_cmd(0xB2); //Página 2
+	
+	for(i=256;i<384;i++){
+		LCD_wr_data(bufferWeb[i]);
+	}
+	
+	LCD_wr_cmd(0x00);
+	LCD_wr_cmd(0x10);
+	LCD_wr_cmd(0xB3); // Pagina 3
+	
+	for(i=384;i<512;i++){
+		LCD_wr_data(bufferWeb[i]);
+	}
+}
+
+
