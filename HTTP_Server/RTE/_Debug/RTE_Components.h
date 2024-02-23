@@ -39,8 +39,8 @@
 #define RTE_Network_Socket_UDP          /* Network Socket UDP */
 /* Keil::CMSIS Driver:Ethernet MAC:2.9 */
 #define RTE_Drivers_ETH_MAC0            /* Driver ETH_MAC0 */
-/* Keil::CMSIS Driver:Ethernet PHY:KSZ8081RNA:6.3.0 */
-#define RTE_Drivers_PHY_KSZ8081RNA      /* Driver PHY KSZ8081RNA/RND */
+/* Keil::CMSIS Driver:Ethernet PHY:LAN8742A:1.3.0 */
+#define RTE_Drivers_PHY_LAN8742A        /* Driver PHY LAN8742A */
 /* Keil::Device:STM32Cube Framework:Classic:1.7.9 */
 #define RTE_DEVICE_FRAMEWORK_CLASSIC
 /* Keil::Device:STM32Cube HAL:ADC:1.7.9 */
