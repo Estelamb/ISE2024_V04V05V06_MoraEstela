@@ -13,6 +13,7 @@
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
 
 #include "rgb.h"
+#include "pot.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
@@ -20,13 +21,14 @@
 #endif
 
 // http_server.c
-//extern uint16_t AD_in (uint32_t ch);
 extern uint8_t  get_button (void);
 
 extern bool LEDrun;
 extern char lcd_text[2][20+1];
 extern osThreadId_t TID_Display;
 extern int32_t LED_rgb_SetOut (uint32_t val);
+
+extern uint16_t ADC_getVoltage(uint32_t ch);
 
 // Local variables.
 static uint8_t P2;
@@ -179,7 +181,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
   const char *lang;
   uint32_t len = 0U;
   uint8_t id;
-  //static uint32_t adv;
+  static uint32_t adv;
   netIF_Option opt = netIF_OptionMAC_Address;
   int16_t      typ = 0;
 
@@ -340,11 +342,11 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       }
       break;
 
-    //case 'g':
+    case 'g':
       // AD Input from 'ad.cgi'
-      /*switch (env[2]) {
+      switch (env[2]) {
         case '1':
-          adv = AD_in (0);
+          adv = ADC_getVoltage (0);
           len = (uint32_t)sprintf (buf, &env[4], adv);
           break;
         case '2':
@@ -357,11 +359,11 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       }
       break;
 
-    case 'x':*/
+    case 'x':
       // AD Input from 'ad.cgx'
-      /*adv = AD_in (0);
+      adv = ADC_getVoltage (0);
       len = (uint32_t)sprintf (buf, &env[1], adv);
-      break;*/
+      break;
 
     case 'y':
       // Button state from 'button.cgx'

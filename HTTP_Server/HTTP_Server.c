@@ -18,6 +18,7 @@
 #include "rgb.h"
 #include "lcd.h"
 #include "Arial12x12.h"
+#include "pot.h"
 
 // Main stack size must be multiple of 8 Bytes
 #define APP_MAIN_STK_SZ (1024U)
@@ -27,7 +28,6 @@ const osThreadAttr_t app_main_attr = {
   .stack_size = sizeof(app_main_stk)
 };
 
-//extern uint16_t AD_in          (uint32_t ch);
 extern uint8_t  get_button     (void);
 extern void     netDHCP_Notify (uint32_t if_num, uint8_t option, const uint8_t *val, uint32_t len);
 
@@ -49,6 +49,8 @@ void LCD_update(void);
 void LCD_symbolToLocalBuffer_L1(uint8_t symbol);
 void LCD_symbolToLocalBuffer_L2(uint8_t symbol);
 
+extern void POT_Initialize(void);
+
 bool LEDrun;
 char lcd_text[2][20+1] = { "LCD line 1",
                            "LCD line 2" };
@@ -62,18 +64,6 @@ static void BlinkLed (void *arg);
 static void Display  (void *arg);
 
 __NO_RETURN void app_main (void *arg);
-
-/* Read analog inputs */
-/*uint16_t AD_in (uint32_t ch) {
-  int32_t val = 0;
-
-  if (ch == 0) {
-    ADC_StartConversion();
-    while (ADC_ConversionDone () < 0);
-    val = ADC_GetValue();
-  }
-  return ((uint16_t)val);
-}*/
 
 /* Read digital inputs */
 uint8_t get_button (void) {
@@ -164,7 +154,7 @@ __NO_RETURN void app_main (void *arg) {
 	}
 	
 	LCD_update();
-  //ADC_Initialize();
+  POT_Initialize();
 
   netInitialize ();
 

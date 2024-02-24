@@ -428,6 +428,16 @@
               <FileType>5</FileType>
               <FilePath>.\lcd.h</FilePath>
             </File>
+            <File>
+              <FileName>pot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pot.c</FilePath>
+            </File>
+            <File>
+              <FileName>pot.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\pot.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -981,6 +991,16 @@
               <FileName>lcd.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\lcd.h</FilePath>
+            </File>
+            <File>
+              <FileName>pot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pot.c</FilePath>
+            </File>
+            <File>
+              <FileName>pot.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\pot.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -46,3 +46,4 @@
 .\debug\http_server.o: C:\Users\estel\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Driver\Include\Driver_Common.h
 .\debug\http_server.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\debug\http_server.o: Arial12x12.h
+.\debug\http_server.o: pot.h
