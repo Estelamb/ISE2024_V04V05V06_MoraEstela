@@ -419,16 +419,6 @@
               <FilePath>.\Arial12x12.h</FilePath>
             </File>
             <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\lcd.h</FilePath>
-            </File>
-            <File>
               <FileName>pot.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\pot.c</FilePath>
@@ -462,6 +452,16 @@
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lcd.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1013,16 +1013,6 @@
               <FilePath>.\Arial12x12.h</FilePath>
             </File>
             <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\lcd.h</FilePath>
-            </File>
-            <File>
               <FileName>pot.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\pot.c</FilePath>
@@ -1056,6 +1046,16 @@
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lcd.h</FilePath>
             </File>
           </Files>
         </Group>

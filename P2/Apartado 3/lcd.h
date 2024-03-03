@@ -7,7 +7,7 @@
 #include "string.h"
 #include <stdio.h>
 
-//Module initialización
+//Module initializaciÃ³n
 void LCD_Initialize(void);
 void LCD_reset(void);
 void LCD_wr_data(unsigned char data);

@@ -17,6 +17,7 @@ c h 2 <td><input type=text name=date size=20 maxlength=20 value="%s"></td></tr>
 t </font></table>
 # Here begin button definitions
 t <p align=center>
+t <input type=submit name=set value="Send" id="sbm">
 t </p></form>
 i pg_footer.inc
 . End of script must be closed with period.

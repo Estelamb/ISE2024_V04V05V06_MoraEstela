@@ -14,6 +14,7 @@
 
 #include "stm32f4xx_hal.h"              // Keil::Device:STM32Cube HAL:Common
 #include "Board_Buttons.h"              // ::Board Support:Buttons
+//#include "Board_ADC.h"                  // ::Board Support:A/D Converter
 #include "rgb.h"
 #include "lcd.h"
 #include "Arial12x12.h"
@@ -45,19 +46,20 @@ uint16_t positionL2 = 0;
 
 extern void LCD_Initialize(void);
 void LCD_update(void);
-void LCD_symbolToLocalBuffer(char text0[21], char text1[21]);
 void LCD_symbolToLocalBuffer_L1(uint8_t symbol);
 void LCD_symbolToLocalBuffer_L2(uint8_t symbol);
+void LCD_symbolToLocalBuffer(char text0[21], char text1[21]);
 
 extern void POT_Initialize(void);
 
 bool LEDrun;
-char lcd_text[2][20+1] = { "LCD line 1",
-                           "LCD line 2" };
+char lcd_text[2][20+1] = { "LCD line 1", "LCD line 2" };
 
 /* Thread IDs */
 osThreadId_t TID_Display;
 osThreadId_t TID_Led;
+
+extern osThreadId_t tid_rtc;   
 
 /* Thread declarations */
 static void BlinkLed (void *arg);
@@ -66,7 +68,8 @@ static void Display  (void *arg);
 __NO_RETURN void app_main (void *arg);
 
 /* Read digital inputs */
-uint8_t get_button (void) {
+uint8_t get_button (void) 
+{
   return ((uint8_t)Buttons_GetState ());
 }
 
@@ -92,17 +95,17 @@ static __NO_RETURN void Display (void *arg) {
 	while(1){
 		/* Wait for signal from DHCP */
     osThreadFlagsWait (0x01U, osFlagsWaitAny, osWaitForever);
+		osThreadFlagsSet (tid_rtc, 0x02);
 		
-		/* Display user text lines */
 		LCD_symbolToLocalBuffer(lcd_text[0], lcd_text[1]);
-		
 	}	
 }
 
 /*----------------------------------------------------------------------------
   Thread 'BlinkLed': Blink the LEDs on an eval board
  *---------------------------------------------------------------------------*/
-static __NO_RETURN void BlinkLed (void *arg) {
+static __NO_RETURN void BlinkLed (void *arg) 
+{
   const uint8_t led_val[16] = { 0x48,0x88,0x84,0x44,0x42,0x22,0x21,0x11,
                                 0x12,0x0A,0x0C,0x14,0x18,0x28,0x30,0x50 };
   uint32_t cnt = 0U;
@@ -125,7 +128,8 @@ static __NO_RETURN void BlinkLed (void *arg) {
 /*----------------------------------------------------------------------------
   Main Thread 'main': Run Network
  *---------------------------------------------------------------------------*/
-__NO_RETURN void app_main (void *arg) {
+__NO_RETURN void app_main (void *arg) 
+{
   int i;
 	(void)arg;
 
@@ -149,7 +153,8 @@ __NO_RETURN void app_main (void *arg) {
   osThreadExit();
 }
 
-void LCD_symbolToLocalBuffer_L1(uint8_t symbol){
+void LCD_symbolToLocalBuffer_L1(uint8_t symbol)
+{
 	uint8_t i, value1, value2;
 	uint16_t offset = 0;
 	
@@ -166,7 +171,8 @@ void LCD_symbolToLocalBuffer_L1(uint8_t symbol){
 	positionL1 = positionL1 + Arial12x12[offset];
 }
 
-void LCD_symbolToLocalBuffer_L2(uint8_t symbol){
+void LCD_symbolToLocalBuffer_L2(uint8_t symbol)
+{
 	uint8_t i, value1, value2;
 	uint16_t offset = 0;
 	
@@ -183,7 +189,8 @@ void LCD_symbolToLocalBuffer_L2(uint8_t symbol){
 	positionL2 = positionL2 + Arial12x12[offset];
 }
 
-void LCD_update(void){
+void LCD_update(void)
+{
 	int i;
 	LCD_wr_cmd(0x00); // 4 bits de la parte baja de la dirección a 0
 	LCD_wr_cmd(0x10); // 4 bits de la parte alta de la dirección a 0
@@ -218,8 +225,11 @@ void LCD_update(void){
 	}
 }
 
-void LCD_symbolToLocalBuffer(char text0[21], char text1[21]){
+void LCD_symbolToLocalBuffer(char text0[21], char text1[21])
+{
 	int i;
+	
+	/* Display user text lines */
 	positionL1 = 0;
 	positionL2 = 0;
 		
@@ -232,7 +242,7 @@ void LCD_symbolToLocalBuffer(char text0[21], char text1[21]){
 	}
 		
 	for(i=0; i<strlen(text1); i++){
-	  LCD_symbolToLocalBuffer_L2(text1[i]);
+		LCD_symbolToLocalBuffer_L2(text1[i]);
 	}
 		
 	LCD_update();

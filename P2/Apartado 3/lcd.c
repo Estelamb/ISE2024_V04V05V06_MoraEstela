@@ -13,7 +13,7 @@ void LCD_Initialize(void) {
 }
 
 void LCD_reset(void){
-	//Inicializaci髇 y configuraci髇 del driver SPI para gestionar el LCD
+	//Inicializaci贸n y configuraci贸n del driver SPI para gestionar el LCD
 	  /* Initialize the SPI driver */
     SPIdrv->Initialize(NULL);
     /* Power up the SPI peripheral */
@@ -39,7 +39,7 @@ void LCD_reset(void){
 	GPIO_InitStruct_LCD.Pin = GPIO_PIN_13; //A0
 	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct_LCD);
 	
-	//Generar la se馻l de reset
+	//Generar la se帽al de reset
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //GPIO_PIN_SET = 1
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //GPIO_PIN_RESET = 0
 	delay(1);
@@ -69,7 +69,7 @@ void delay(uint32_t n_microsegundos){
 	__HAL_TIM_CLEAR_IT(&tim7, TIM_IT_UPDATE);
 	__HAL_TIM_CLEAR_FLAG(&tim7, TIM_FLAG_UPDATE);
 	
-	//Parar el timer y ponerlo a 0 para la siguiente llamada a la funci髇
+	//Parar el timer y ponerlo a 0 para la siguiente llamada a la funci贸n
 	HAL_TIM_Base_Stop_IT(&tim7);
 	HAL_TIM_Base_DeInit(&tim7);
 }
@@ -81,7 +81,7 @@ void LCD_wr_data(unsigned char data){
 	//Seleccionar A0 = 1;
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_13, GPIO_PIN_SET);
 	
-	//Escribir un dato (data) usando la funci髇 SPIDrv->Send(...);
+	//Escribir un dato (data) usando la funci贸n SPIDrv->Send(...);
 	SPIdrv->Send(&data,1);
 	
 	//Esperar a que se libere el bus SPI;
@@ -98,7 +98,7 @@ void LCD_wr_cmd(unsigned char cmd){
 	//Seleccionar A0 = 0;
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_13, GPIO_PIN_RESET);
 	
-	//Escribir un comando (cmd) usando la funci髇 SPIDrv->Send(...);
+	//Escribir un comando (cmd) usando la funci贸n SPIDrv->Send(...);
 	SPIdrv->Send(&cmd,1);
 	
 	//Esperar a que se libere el bus SPI;
@@ -122,4 +122,5 @@ void LCD_init(void){
 	LCD_wr_cmd(0xA4); //Display all points normal -> normal display
 	LCD_wr_cmd(0xA6); //LCD display -> normal
 }
+
 

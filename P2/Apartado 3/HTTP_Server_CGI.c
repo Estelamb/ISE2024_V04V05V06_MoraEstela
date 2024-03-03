@@ -28,13 +28,11 @@ extern char lcd_text[2][20+1];
 extern osThreadId_t TID_Display;
 
 extern char rtc_text[2][20+1];
-extern osThreadId_t TID_Reloj;
+extern osThreadId_t tid_rtc;
 
 extern int32_t LED_rgb_SetOut (uint32_t val);
 
-extern uint16_t ADC_getVoltage(uint32_t ch);
-
-extern osThreadId_t tid_Thread_RTC;   
+extern uint16_t ADC_getVoltage(uint32_t ch);  
 
 // Local variables.
 static uint8_t P2;
@@ -173,6 +171,16 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
         // LCD Module line 2 text
         strcpy (lcd_text[1], var+5);
         osThreadFlagsSet (TID_Display, 0x01);
+      }
+			else if (strncmp (var, "time=", 6) == 0) {
+        // RTC Module line 1 text
+        strcpy (rtc_text[0], var+6);
+        osThreadFlagsSet (tid_rtc, 0x01);
+      }
+      else if (strncmp (var, "date=", 6) == 0) {
+        // RTC Module line 2 text
+        strcpy (rtc_text[1], var+6);
+        osThreadFlagsSet (tid_rtc, 0x01);
       }
     }
   } while (data);
@@ -369,9 +377,11 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
       // RTC Module control from 'rtc.cgi'
       switch (env[2]) {
         case '1':
+					osThreadFlagsSet (tid_rtc, 0x01);
           len = (uint32_t)sprintf (buf, &env[4], rtc_text[0]);
           break;
         case '2':
+					osThreadFlagsSet (tid_rtc, 0x01);
           len = (uint32_t)sprintf (buf, &env[4], rtc_text[1]);
           break;
       }
